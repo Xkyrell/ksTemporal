@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import me.xkyrell.temporal.TemporalUnit;
 import me.xkyrell.temporal.format.TemporalFormatter;
 import me.xkyrell.temporal.format.style.CompactTemporalStyle;
+
+import java.util.Map;
 import java.util.StringJoiner;
 
 @RequiredArgsConstructor
@@ -15,9 +17,14 @@ public class CompactTemporalFormatter implements TemporalFormatter<CompactTempor
 
     @Override
     public String format(long millis, CompactTemporalStyle style) throws Throwable {
+        Map<String, TemporalUnit> units = style.getUnits();
+        if (units.isEmpty() || millis < 0) {
+            return "";
+        }
+
         StringJoiner formattedTime = new StringJoiner(":");
         for (String unitPattern : pattern.split(":")) {
-            TemporalUnit unit = style.getUnits().get(unitPattern);
+            TemporalUnit unit = units.get(unitPattern);
             if (unit == null) {
                 continue;
             }

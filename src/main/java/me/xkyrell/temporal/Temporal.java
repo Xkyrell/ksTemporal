@@ -3,19 +3,24 @@ package me.xkyrell.temporal;
 import lombok.*;
 import me.xkyrell.temporal.format.style.TemporalStyle;
 import me.xkyrell.temporal.format.style.TextualTemporalStyle;
-
 import java.time.Duration;
 import java.util.function.Function;
 
 @Getter
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Temporal implements TemporalHolder<Temporal>, TemporalValue, Cloneable {
 
     public static final Temporal ZERO = new Temporal(0L);
 
     private long millis;
+
+    private Temporal(long millis) {
+        if (millis < 0) {
+            throw new IllegalArgumentException("Time cannot be negative");
+        }
+        this.millis = millis;
+    }
 
     public static Temporal of(long millis) {
         return new Temporal(millis);
@@ -51,6 +56,9 @@ public class Temporal implements TemporalHolder<Temporal>, TemporalValue, Clonea
 
     @Override
     public Temporal operation(@NonNull Function<Long, Long> operator) {
+        if (millis < 0) {
+            throw new IllegalArgumentException("Time cannot be negative");
+        }
         millis = operator.apply(millis);
         return this;
     }

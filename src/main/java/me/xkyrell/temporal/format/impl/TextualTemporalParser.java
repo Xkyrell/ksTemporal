@@ -10,6 +10,9 @@ public class TextualTemporalParser implements TemporalParser<TextualTemporalStyl
     @Override
     public long parse(String value, TextualTemporalStyle style) throws NumberFormatException {
         Map<String, TemporalEntry> entries = style.getTemporalEntries();
+        if (entries.isEmpty() || value == null || value.isEmpty()) {
+            return 0L;
+        }
 
         long totalMillis = 0L;
         for (String line : value.toLowerCase().split(" ")) {

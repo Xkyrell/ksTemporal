@@ -16,11 +16,15 @@ public interface TextualTemporalStyle extends TemporalStyle {
         return SimpleTextualTemporalStyle.TEXTUAL;
     }
 
+    boolean includesSmallestUnit();
+
     int applyPluralForm(long millis);
 
     Map<String, TemporalEntry> getTemporalEntries();
 
     interface Builder extends StyleBuilder<Builder, TextualTemporalStyle> {
+
+        Builder includeSmallestUnit();
 
         Builder pluralize(@NonNull Function<Long, Integer> pluralizer);
 

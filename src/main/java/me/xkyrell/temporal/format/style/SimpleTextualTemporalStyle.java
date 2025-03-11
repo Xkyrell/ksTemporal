@@ -24,17 +24,25 @@ final class SimpleTextualTemporalStyle extends AbstractTemporalStyle<TextualTemp
     @Getter
     private final Map<String, TemporalEntry> temporalEntries;
     private final Function<Long, Integer> pluralizer;
+    private final boolean includeSmallestUnit;
 
     private SimpleTextualTemporalStyle(
             TemporalFormatter<TextualTemporalStyle> formatter,
             TemporalParser<TextualTemporalStyle> parser,
             Map<String, TemporalEntry> temporalEntries,
-            Function<Long, Integer> pluralizer
+            Function<Long, Integer> pluralizer,
+            boolean includeSmallestUnit
     ) {
         super(formatter, parser);
 
         this.temporalEntries = temporalEntries;
         this.pluralizer = pluralizer;
+        this.includeSmallestUnit = includeSmallestUnit;
+    }
+
+    @Override
+    public boolean includesSmallestUnit() {
+        return includeSmallestUnit;
     }
 
     @Override
@@ -46,6 +54,13 @@ final class SimpleTextualTemporalStyle extends AbstractTemporalStyle<TextualTemp
 
         private final Map<String, TemporalEntry> temporalEntries = new HashMap<>();
         private Function<Long, Integer> pluralizer;
+        private boolean includeSmallestUnit;
+
+        @Override
+        public Builder includeSmallestUnit() {
+            includeSmallestUnit = true;
+            return self;
+        }
 
         @Override
         public Builder pluralize(@NonNull Function<Long, Integer> pluralizer) {
@@ -68,7 +83,8 @@ final class SimpleTextualTemporalStyle extends AbstractTemporalStyle<TextualTemp
         @Override
         public TextualTemporalStyle build() {
             return new SimpleTextualTemporalStyle(
-                    getFormatter(), getParser(), temporalEntries, pluralizer
+                    getFormatter(), getParser(), temporalEntries,
+                    pluralizer, includeSmallestUnit
             );
         }
     }
