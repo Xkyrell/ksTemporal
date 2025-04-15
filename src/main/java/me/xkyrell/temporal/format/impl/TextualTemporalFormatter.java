@@ -27,13 +27,14 @@ public class TextualTemporalFormatter implements TemporalFormatter<TextualTempor
                 joiner.add(Long.toString(amount)).add(unitName);
                 millis %= entry.getMillis();
             }
-
-            if (joiner.length() == 0 && style.includesSmallestUnit()) {
-                int index = style.applyPluralForm(amount);
-                String unitName = getUnitOrDefault(sortedEntries.getLast().getUnitNames(), index);
-                joiner.add(Long.toString(amount)).add(unitName);
-            }
         }
+
+        if (joiner.length() == 0 && style.includesSmallestUnit()) {
+            int index = style.applyPluralForm(1);
+            String unitName = getUnitOrDefault(sortedEntries.getLast().getUnitNames(), index);
+            joiner.add(Long.toString(0)).add(unitName);
+        }
+
         return joiner.toString();
     }
 
