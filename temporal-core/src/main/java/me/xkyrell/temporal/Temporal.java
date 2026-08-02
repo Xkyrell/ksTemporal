@@ -80,7 +80,7 @@ public class Temporal implements TemporalHolder<Temporal>, TemporalValue, Clonea
     }
 
     public Duration toDuration() {
-        return Duration.ofMillis(millis);
+        return Duration.ofMillis(millis).minus(Duration.ZERO);
     }
 
     public boolean isValid() {
