@@ -1,32 +1,37 @@
 package me.xkyrell.temporal;
 
-import lombok.NonNull;
-import me.xkyrell.temporal.format.style.TemporalStyle;
-import me.xkyrell.temporal.format.style.TextualTemporalStyle;
+import org.jetbrains.annotations.NotNull;
 
 public interface TemporalValue extends Comparable<TemporalValue> {
 
-    long get(@NonNull TemporalUnit unit);
+    /**
+     * Returns the value in the specified unit.
+     *
+     * @param unit the unit of the specified amount
+     * @return the converted value
+     * @since 1.0
+     */
+    long get(@NotNull TemporalUnit unit);
 
-    long getMillis();
-
-    default boolean isGreaterThan(@NonNull TemporalValue value) {
+    /**
+     * Returns whether this value is greater than the specified value.
+     *
+     * @param value the value to compare to
+     * @return {@code true} if this value is greater than the specified value, otherwise {@code false}
+     * @since 1.0
+     */
+    default boolean isGreaterThan(@NotNull TemporalValue value) {
         return compareTo(value) > 0;
     }
 
-    default boolean isLessThan(@NonNull TemporalValue value) {
+    /**
+     * Returns whether this value is less than the specified value.
+     *
+     * @param value the value to compare to
+     * @return {@code true} if this value is less than the specified value, otherwise {@code false}
+     * @since 2.0
+     */
+    default boolean isLessThan(@NotNull TemporalValue value) {
         return compareTo(value) < 0;
-    }
-
-    default boolean isEqual(@NonNull TemporalValue value) {
-        return compareTo(value) == 0;
-    }
-
-    default String formatAs(TemporalStyle style) {
-        return style.format(getMillis());
-    }
-
-    default String format() {
-        return formatAs(TextualTemporalStyle.textual());
     }
 }
