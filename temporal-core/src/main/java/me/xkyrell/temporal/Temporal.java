@@ -17,6 +17,24 @@ public interface Temporal extends TemporalValue {
     Temporal operation(@NotNull LongUnaryOperator onOperator);
 
     /**
+     * Truncates this value to the specified unit, returning at least one unit.
+     *
+     * @param unit the unit
+     * @return the truncated value
+     * @since 2.0
+     */
+    Temporal truncateAtLeastOne(@NotNull TemporalUnit unit);
+
+    /**
+     * Truncates this value to the specified unit.
+     *
+     * @param unit the unit
+     * @return the truncated value
+     * @since 2.0
+     */
+    Temporal truncate(@NotNull TemporalUnit unit);
+
+    /**
      * Returns a new value with the specified amount added.
      *
      * @param value the amount to add

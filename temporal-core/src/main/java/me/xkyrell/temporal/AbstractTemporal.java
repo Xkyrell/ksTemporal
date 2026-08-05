@@ -6,6 +6,23 @@ import java.util.Objects;
 abstract class AbstractTemporal implements Temporal {
 
     @Override
+    public Temporal truncateAtLeastOne(@NotNull TemporalUnit unit) {
+        Objects.requireNonNull(unit, "unit cannot be null");
+        long factor = unit.toMillis();
+        return operation(millis -> {
+            long truncated = (millis / factor) * factor;
+            return truncated != 0L ? truncated : (millis < 0L ? -factor : factor);
+        });
+    }
+
+    @Override
+    public Temporal truncate(@NotNull TemporalUnit unit) {
+        Objects.requireNonNull(unit, "unit cannot be null");
+        long factor = unit.toMillis();
+        return operation(millis -> (millis / factor) * factor);
+    }
+
+    @Override
     public Temporal plus(long value, @NotNull TemporalUnit unit) {
         Objects.requireNonNull(unit, "unit cannot be null");
         return operation(millis -> {
@@ -89,13 +106,6 @@ abstract class AbstractTemporal implements Temporal {
     @Override
     public int hashCode() {
         return Objects.hashCode(toMillisInternal());
-    }
-
-    @Override
-    public String toString() {
-        return "TemporalImpl{" +
-                "millis=" + toMillisInternal() +
-                '}';
     }
 
     protected abstract long toMillisInternal();
