@@ -72,4 +72,35 @@ public interface Temporal extends TemporalValue {
      */
     Temporal divide(long divisor);
 
+    /**
+     * Returns this value or the specified minimum value, whichever is greater.
+     *
+     * @param temporal the minimum value
+     * @return this value if it is greater than or equal to the minimum, otherwise the minimum value
+     * @since 2.0
+     */
+    default Temporal atLeast(@NotNull Temporal temporal) {
+        return isLessThan(temporal) ? temporal : this;
+    }
+
+    /**
+     * Returns this value or the specified maximum value, whichever is smaller.
+     *
+     * @param temporal the maximum value
+     * @return this value if it is less than or equal to the maximum, otherwise the maximum value
+     * @since 2.0
+     */
+    default Temporal atMost(@NotNull Temporal temporal) {
+        return isGreaterThan(temporal) ? temporal : this;
+    }
+
+    /**
+     * Returns the absolute value.
+     *
+     * @return the absolute value
+     * @since 2.0
+     */
+    default Temporal abs() {
+        return isNegative() ? multiply(-1L) : this;
+    }
 }
