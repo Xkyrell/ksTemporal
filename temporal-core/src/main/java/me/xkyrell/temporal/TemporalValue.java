@@ -1,7 +1,9 @@
 package me.xkyrell.temporal;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+@ApiStatus.NonExtendable
 public interface TemporalValue extends Comparable<TemporalValue> {
 
     /**
@@ -12,6 +14,25 @@ public interface TemporalValue extends Comparable<TemporalValue> {
      * @since 1.0
      */
     long get(@NotNull TemporalUnit unit);
+
+    /**
+     * Returns whether this value is a multiple of the specified amount.
+     *
+     * @param amount the time amount
+     * @param unit the unit of the specified amount
+     * @return {@code true} if this value is a multiple, otherwise {@code false}
+     * @since 2.0
+     */
+    boolean isMultipleOf(long amount, @NotNull TemporalUnit unit);
+
+    /**
+     * Returns whether this value is a multiple of the specified value.
+     *
+     * @param value the divisor
+     * @return {@code true} if this value is a multiple, otherwise {@code false}
+     * @since 2.0
+     */
+    boolean isMultipleOf(@NotNull TemporalValue value);
 
     /**
      * Returns whether this value is greater than or equal to the specified value.
