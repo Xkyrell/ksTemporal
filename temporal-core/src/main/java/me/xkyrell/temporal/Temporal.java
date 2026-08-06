@@ -3,6 +3,8 @@ package me.xkyrell.temporal;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 import java.util.function.LongUnaryOperator;
 
 @ApiStatus.NonExtendable
@@ -31,6 +33,49 @@ public interface Temporal extends TemporalValue {
     @Contract(value = "_ -> new", pure = true)
     static Temporal of(long millis) {
         return new TemporalImpl(millis);
+    }
+
+    /**
+     * Creates a new immutable temporal representing the difference
+     * between two milliseconds timestamps.
+     *
+     * @param from the start time in milliseconds
+     * @param to the end time in milliseconds
+     * @return a new immutable temporal
+     * @since 1.0
+     */
+    @Contract(value = "_, _ -> new", pure = true)
+    static Temporal between(long from, long to) {
+        return new TemporalImpl(to - from);
+    }
+
+    /**
+     * Creates a new immutable temporal value representing the difference
+     * between two temporal values.
+     *
+     * @param from the start temporal value
+     * @param to the end temporal value
+     * @return a new immutable temporal
+     * @since 1.0
+     */
+    @Contract(value = "_, _ -> new", pure = true)
+    static Temporal between(@NotNull TemporalValue from, @NotNull TemporalValue to) {
+        Objects.requireNonNull(from, "from");
+        Objects.requireNonNull(to, "to");
+        return between(to.get(TemporalUnit.MILLIS), from.get(TemporalUnit.MILLIS));
+    }
+
+    /**
+     * Creates a new immutable copy of the specified temporal value.
+     *
+     * @param value the temporal value to copy
+     * @return a new immutable temporal value
+     * @since 1.0
+     */
+    @Contract(value = "_ -> new", pure = true)
+    static Temporal from(@NotNull TemporalValue value) {
+        Objects.requireNonNull(value, "value");
+        return new TemporalImpl(value.get(TemporalUnit.MILLIS));
     }
 
     /**
