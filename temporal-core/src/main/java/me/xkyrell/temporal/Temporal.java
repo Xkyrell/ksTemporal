@@ -1,11 +1,48 @@
 package me.xkyrell.temporal;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import java.util.function.LongUnaryOperator;
 
 @ApiStatus.NonExtendable
 public interface Temporal extends TemporalValue {
+
+    /**
+     * Creates a new immutable temporal.
+     *
+     * @param amount the time amount
+     * @param unit the unit of the specified amount
+     * @return a new immutable temporal
+     * @since 1.0
+     */
+    @Contract(value = "_, _ -> new", pure = true)
+    static Temporal of(long amount, @NotNull TemporalUnit unit) {
+        return new TemporalImpl(amount, unit);
+    }
+
+    /**
+     * Creates a new immutable temporal from milliseconds.
+     *
+     * @param millis the time amount in milliseconds
+     * @return a new immutable temporal
+     * @since 1.0
+     */
+    @Contract(value = "_ -> new", pure = true)
+    static Temporal of(long millis) {
+        return new TemporalImpl(millis);
+    }
+
+    /**
+     * Returns a temporal representing zero milliseconds.
+     *
+     * @return the immutable zero temporal
+     * @since 1.0
+     */
+    @Contract(pure = true)
+    static Temporal zero() {
+        return TemporalImpl.ZERO;
+    }
 
     /**
      * Applies the specified operation to this value.
