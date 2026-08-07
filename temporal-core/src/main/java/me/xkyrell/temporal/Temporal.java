@@ -3,12 +3,24 @@ package me.xkyrell.temporal;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 import java.util.function.LongUnaryOperator;
 
 @ApiStatus.NonExtendable
 public interface Temporal extends TemporalValue {
+
+    /**
+     * Creates a new mutable temporal with minimal allocations.
+     *
+     * @param amount the time amount
+     * @param unit the unit of the specified amount
+     * @return a new mutable temporal
+     * @since 2.0
+     */
+    @Contract(value = "_, _ -> new", pure = true)
+    static Temporal ofFast(long amount, @NotNull TemporalUnit unit) {
+        return new FastTemporal(amount, unit);
+    }
 
     /**
      * Creates a new immutable temporal.
@@ -21,6 +33,18 @@ public interface Temporal extends TemporalValue {
     @Contract(value = "_, _ -> new", pure = true)
     static Temporal of(long amount, @NotNull TemporalUnit unit) {
         return new TemporalImpl(amount, unit);
+    }
+
+    /**
+     * Creates a new mutable temporal from milliseconds with minimal allocations.
+     *
+     * @param millis the time amount in milliseconds
+     * @return a new mutable temporal
+     * @since 2.0
+     */
+    @Contract(value = "_ -> new", pure = true)
+    static Temporal ofFast(long millis) {
+        return new FastTemporal(millis);
     }
 
     /**
@@ -60,8 +84,8 @@ public interface Temporal extends TemporalValue {
      */
     @Contract(value = "_, _ -> new", pure = true)
     static Temporal between(@NotNull TemporalValue from, @NotNull TemporalValue to) {
-        Objects.requireNonNull(from, "from");
-        Objects.requireNonNull(to, "to");
+        Objects.requireNonNull(from, "from cannot be null");
+        Objects.requireNonNull(to, "to cannot be null");
         return between(to.get(TemporalUnit.MILLIS), from.get(TemporalUnit.MILLIS));
     }
 
@@ -74,7 +98,7 @@ public interface Temporal extends TemporalValue {
      */
     @Contract(value = "_ -> new", pure = true)
     static Temporal from(@NotNull TemporalValue value) {
-        Objects.requireNonNull(value, "value");
+        Objects.requireNonNull(value, "value cannot be null");
         return new TemporalImpl(value.get(TemporalUnit.MILLIS));
     }
 
