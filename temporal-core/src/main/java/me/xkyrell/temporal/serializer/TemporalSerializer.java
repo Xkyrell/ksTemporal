@@ -28,6 +28,16 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
     T deserialize(@NotNull R input, @NotNull F format);
 
     /**
+     * Deserializes a temporal from an input of type {@code R}.
+     *
+     * @param input the serialized input
+     * @return the temporal
+     * @throws IllegalArgumentException if the input cannot be deserialized using the specified format
+     * @since 2.0
+     */
+    T deserialize(@NotNull R input);
+
+    /**
      * Serializes a temporal into an output of type {@code R}.
      *
      * @param temporal the temporal to serialize
@@ -48,5 +58,15 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      * @since 2.0
      */
     R serialize(@NotNull T temporal, @NotNull F format);
+
+    /**
+     * Serializes a temporal into an output of type {@code R}.
+     *
+     * @param temporal the temporal to serialize
+     * @return the output
+     * @throws IllegalArgumentException if the temporal cannot be serialized using the specified format
+     * @since 2.0
+     */
+    R serialize(@NotNull T temporal);
 
 }
