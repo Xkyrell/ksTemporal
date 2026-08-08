@@ -2,6 +2,7 @@ package me.xkyrell.temporal.serializer;
 
 import me.xkyrell.temporal.Temporal;
 import org.jetbrains.annotations.NotNull;
+import java.util.function.Supplier;
 
 public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat, R> {
 
@@ -17,6 +18,17 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
     T deserialize(@NotNull R input, @NotNull Iterable<? extends F> formats);
 
     /**
+     * Deserializes a temporal from an input of type {@code R}, otherwise a fallback value
+     *
+     * @param input the serialized input
+     * @param format the format to use for deserialization
+     * @param onFallback the fallback value
+     * @return the temporal
+     * @since 2.0
+     */
+    T deserializeOrFallback(@NotNull R input, @NotNull F format, @NotNull Supplier<T> onFallback);
+
+    /**
      * Deserializes a temporal from an input of type {@code R}.
      *
      * @param input the serialized input
@@ -26,6 +38,16 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      * @since 2.0
      */
     T deserialize(@NotNull R input, @NotNull F format);
+
+    /**
+     * Deserializes a temporal from an input of type {@code R}, otherwise a fallback value
+     *
+     * @param input the serialized input
+     * @param onFallback the fallback value
+     * @return the temporal
+     * @since 2.0
+     */
+    T deserializeOrFallback(@NotNull R input, @NotNull Supplier<T> onFallback);
 
     /**
      * Deserializes a temporal from an input of type {@code R}.
@@ -49,6 +71,17 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
     R serialize(@NotNull T temporal, @NotNull Iterable<? extends F> formats);
 
     /**
+     * Serializes a temporal into an output of type {@code R}, otherwise a fallback value
+     *
+     * @param temporal the temporal to serialize
+     * @param format the format to use for serialization
+     * @param onFallback the fallback value
+     * @return the output
+     * @since 2.0
+     */
+    R serializeOrFallback(@NotNull T temporal, @NotNull F format, @NotNull Supplier<R> onFallback);
+
+    /**
      * Serializes a temporal into an output of type {@code R}.
      *
      * @param temporal the temporal to serialize
@@ -58,6 +91,16 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      * @since 2.0
      */
     R serialize(@NotNull T temporal, @NotNull F format);
+
+    /**
+     * Serializes a temporal into an output of type {@code R}, otherwise a fallback value
+     *
+     * @param temporal the temporal to serialize
+     * @param onFallback the fallback value
+     * @return the output
+     * @since 2.0
+     */
+    R serializeOrFallback(@NotNull T temporal, @NotNull Supplier<R> onFallback);
 
     /**
      * Serializes a temporal into an output of type {@code R}.
