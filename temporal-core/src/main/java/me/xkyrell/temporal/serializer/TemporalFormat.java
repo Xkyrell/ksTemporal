@@ -1,44 +1,45 @@
 package me.xkyrell.temporal.serializer;
 
+import me.xkyrell.temporal.TemporalUnit;
 import org.jetbrains.annotations.NotNull;
 
 public interface TemporalFormat {
 
     /**
-     * Returns the delimiter used to separate temporal units.
+     * Returns the first temporal unit included during formatting.
      *
-     * @return the unit delimiter
+     * @return the first temporal unit
      * @since 2.0
      */
-    String getDelimiter();
+    TemporalUnit getFirstUnit();
 
     /**
-     * Returns the maximum number of temporal units included during formatting.
+     * Returns the last temporal unit included during formatting.
      *
-     * @return the number limit
+     * @return the last temporal unit
      * @since 2.0
      */
-    int getUnitLimit();
+    TemporalUnit getLastUnit();
 
     interface SharedBuilder<B extends SharedBuilder<B, F>, F extends TemporalFormat> {
 
         /**
-         * Sets the delimiter used to separate temporal units.
+         * Sets the first temporal unit to include during formatting.
          *
-         * @param delimiter the unit delimiter
+         * @param unit the first temporal unit
          * @return this builder
          * @since 2.0
          */
-        B delimiter(@NotNull String delimiter);
+        B firstUnit(@NotNull TemporalUnit unit);
 
         /**
-         * Sets the maximum number of temporal units to include during formatting.
+         * Sets the last temporal unit to include during formatting.
          *
-         * @param limit the maximum number of formatted units
+         * @param unit the last temporal unit
          * @return this builder
          * @since 2.0
          */
-        B unitLimit(int limit);
+        B lastUnit(@NotNull TemporalUnit unit);
 
         /**
          * Builds a new temporal format.
