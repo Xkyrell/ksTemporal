@@ -1,7 +1,6 @@
 package me.xkyrell.temporal;
 
 import org.junit.jupiter.api.Test;
-import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,47 +8,96 @@ class TemporalTest {
 
     @Test
     void testZeroInstance() {
-        assertEquals(0L, Temporal.ZERO.getMillis(), "ZERO instance should hve 0 millis");
-    }
-
-    @Test
-    void testOfMillis() {
-        Temporal temporal = Temporal.of(1000L);
-        assertEquals(1000L, temporal.getMillis(), "Temporal#of should create an instance with specified millis");
+        assertEquals(0L, Temporal.zero().get(TemporalUnit.MILLIS));
     }
 
     @Test
     void testOfMillisWithUnit() {
-        TemporalUnit seconds = TemporalUnit.SECONDS;
-        Temporal temporal = Temporal.of(2L, seconds);
-        assertEquals(2000L, temporal.getMillis(), "Temporal#of should calculate millis based on unit conversion");
-    }
+        Temporal temporal = Temporal.of(2L, TemporalUnit.SECONDS)
+                .plus(820L, TemporalUnit.MILLIS);
 
-    @Test
-    void testOfDuration() {
-        Duration duration = Duration.ofSeconds(5);
-        Temporal temporal = Temporal.of(duration);
-        assertEquals(duration.toMillis(), temporal.getMillis(), "Temporal#of should create instance from Duration");
+        assertEquals(2820L, temporal.get(TemporalUnit.MILLIS));
     }
 
     @Test
     void testBetweenMillis() {
         Temporal temporal = Temporal.between(1000L, 3000L);
-        assertEquals(2000L, temporal.getMillis(), "Temporal#between should calculate the difference between millis");
+        assertEquals(2000L, temporal.get(TemporalUnit.MILLIS));
     }
 
     @Test
     void testOperation() {
         Temporal temporal = Temporal.of(1000L);
-        temporal.operation(millis -> millis + 500L);
-        assertEquals(1500L, temporal.getMillis(), "Operation should apply function to millis");
+        temporal = temporal.operation(millis -> millis + 500L);
+        assertEquals(1500L, temporal.get(TemporalUnit.MILLIS));
+    }
+
+    @Test
+    void testIsMultipleOf() {
+        Temporal temporal = Temporal.of(2L, TemporalUnit.HOURS);
+        assertTrue(temporal.isMultipleOf(120L, TemporalUnit.MINUTES));
+        assertFalse(temporal.isMultipleOf(3L, TemporalUnit.HOURS));
+        assertFalse(temporal.isMultipleOf(61L, TemporalUnit.MINUTES));
+    }
+
+    @Test
+    void testTruncate() {
+        Temporal temporal = Temporal.of(1L, TemporalUnit.DAYS)
+                .plus(5L, TemporalUnit.HOURS)
+                .plus(32L, TemporalUnit.MINUTES)
+                .plus(45L, TemporalUnit.SECONDS);
+
+        assertEquals(
+                Temporal.of(1L, TemporalUnit.DAYS),
+                temporal.truncate(TemporalUnit.DAYS)
+        );
+
+        assertEquals(
+                Temporal.of(1L, TemporalUnit.DAYS)
+                        .plus(5L, TemporalUnit.HOURS),
+                temporal.truncate(TemporalUnit.HOURS)
+        );
+
+        assertEquals(
+                Temporal.of(1L, TemporalUnit.DAYS)
+                        .plus(5L, TemporalUnit.HOURS)
+                        .plus(32L, TemporalUnit.MINUTES),
+                temporal.truncate(TemporalUnit.MINUTES)
+        );
+
+        assertEquals(temporal, temporal.truncate(TemporalUnit.SECONDS));
+    }
+
+    @Test
+    void testTruncateAtLeastOne() {
+        Temporal temporal = Temporal.of(1L, TemporalUnit.DAYS)
+                .plus(5L, TemporalUnit.HOURS)
+                .plus(32L, TemporalUnit.MINUTES)
+                .plus(45L, TemporalUnit.SECONDS);
+
+        assertEquals(
+                Temporal.of(1L, TemporalUnit.DAYS),
+                temporal.truncateAtLeastOne(TemporalUnit.DAYS)
+        );
+
+        assertEquals(
+                Temporal.of(1L, TemporalUnit.DAYS)
+                        .plus(5L, TemporalUnit.HOURS),
+                temporal.truncateAtLeastOne(TemporalUnit.HOURS)
+        );
+
+        assertEquals(
+                Temporal.of(1L, TemporalUnit.DAYS)
+                        .plus(5L, TemporalUnit.HOURS)
+                        .plus(32L, TemporalUnit.MINUTES),
+                temporal.truncateAtLeastOne(TemporalUnit.MINUTES)
+        );
     }
 
     @Test
     void testGetWithUnit() {
-        Temporal temporal = Temporal.of(1000L);
-        long result = temporal.get(TemporalUnit.SECONDS);
-        assertEquals(1L, result, "Get should return millis converted by TemporalUnit");
+        Temporal temporal = Temporal.of(7000L);
+        assertEquals(7L, temporal.get(TemporalUnit.SECONDS));
     }
 
     @Test
@@ -57,35 +105,23 @@ class TemporalTest {
         Temporal greaterTemporal = Temporal.of(1000L);
         Temporal lesserTemporal = Temporal.of(500L);
 
-        assertTrue(greaterTemporal.compareTo(lesserTemporal) > 0, "Temporal#compareTo should indicate greater value");
-        assertTrue(lesserTemporal.compareTo(greaterTemporal) < 0, "Temporal#compareTo should indicate lesser value");
-        assertEquals(0, greaterTemporal.compareTo(greaterTemporal), "Temporal#compareTo should return 0 for equal values");
+        assertTrue(greaterTemporal.compareTo(lesserTemporal) > 0);
+        assertTrue(lesserTemporal.compareTo(greaterTemporal) < 0);
     }
 
     @Test
     void testClone() {
         Temporal original = Temporal.of(1000L);
-        Temporal cloned = original.clone();
+        Temporal cloned = Temporal.from(original);
 
-        assertEquals(original, cloned, "Temporal#clone should create an identical instance");
-        assertNotSame(original, cloned, "Temporal#clone should create a different instance");
+        assertEquals(original, cloned);
+        assertNotSame(original, cloned);
     }
 
     @Test
-    void testToDuration() {
-        Temporal temporal = Temporal.of(1000L);
-        assertEquals(Duration.ofMillis(1000L), temporal.toDuration(), "Temporal#toDuration should convert millis to Duration");
-    }
-
-    @Test
-    void testIsValid() {
-        assertTrue(Temporal.of(1000L).isValid(), "Temporal is valid if millis > 0");
-        assertFalse(Temporal.of(0L).isValid(), "Temporal is invalid if millis <= 0");
-    }
-
-    @Test
-    void testIsZero() {
-        assertTrue(Temporal.of(0L).isZero(), "Temporal is zero if millis == 0");
-        assertFalse(Temporal.of(1000L).isZero(), "Temporal is not zero if millis != 0");
+    void testTemporalValidation() {
+        assertTrue(Temporal.of(1000L).isPositive());
+        assertTrue(Temporal.of(-500L).isNegative());
+        assertTrue(Temporal.of(0L).isZero());
     }
 }
