@@ -2,6 +2,11 @@ package me.xkyrell.temporal;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A {@link TemporalUnit} represents a unit of time with a fixed duration.
+ *
+ * @since 1.0
+ */
 public enum TemporalUnit {
 
     MILLIS(1L),

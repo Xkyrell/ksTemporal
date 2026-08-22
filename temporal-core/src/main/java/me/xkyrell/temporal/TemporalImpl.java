@@ -12,7 +12,7 @@ final class TemporalImpl extends AbstractTemporal {
 
     TemporalImpl(long amount, @NotNull TemporalUnit unit) {
         Objects.requireNonNull(unit, "unit cannot be null");
-        this.millis = unit.convert(amount, TemporalUnit.MILLIS);
+        this.millis = TemporalUnit.MILLIS.convert(amount, unit);
     }
 
     TemporalImpl(long millis) {
@@ -32,8 +32,6 @@ final class TemporalImpl extends AbstractTemporal {
 
     @Override
     public String toString() {
-        return "TemporalImpl{" +
-                "millis=" + millis +
-                '}';
+        return "TemporalImpl{millis=" + millis + '}';
     }
 }

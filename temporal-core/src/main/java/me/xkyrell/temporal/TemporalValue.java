@@ -1,9 +1,13 @@
 package me.xkyrell.temporal;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-@ApiStatus.NonExtendable
+/**
+ * Represents a temporal value that can be queried in different temporal units
+ * and compared with other temporal values.
+ *
+ * @since 1.0
+ */
 public interface TemporalValue extends Comparable<TemporalValue> {
 
     /**

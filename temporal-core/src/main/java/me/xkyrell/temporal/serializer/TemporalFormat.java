@@ -3,6 +3,11 @@ package me.xkyrell.temporal.serializer;
 import me.xkyrell.temporal.TemporalUnit;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents the configuration for serialization/deserialization.
+ *
+ * @since 2.0
+ */
 public interface TemporalFormat {
 
     /**
@@ -21,6 +26,13 @@ public interface TemporalFormat {
      */
     TemporalUnit getLastUnit();
 
+    /**
+     * A builder for configuring temporal formats.
+     *
+     * @param <B> the builder type
+     * @param <F> the temporal format type
+     * @since 2.0
+     */
     interface SharedBuilder<B extends SharedBuilder<B, F>, F extends TemporalFormat> {
 
         /**

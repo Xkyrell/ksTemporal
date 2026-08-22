@@ -4,6 +4,14 @@ import me.xkyrell.temporal.Temporal;
 import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
+/**
+ * A {@link Temporal} serializer.
+ *
+ * @param <T> the temporal type
+ * @param <F> the temporal format type
+ * @param <R> the serialized input/output type
+ * @since 2.0
+ */
 public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat, R> {
 
     /**
@@ -12,7 +20,7 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      * @param input the serialized input
      * @param formats the formats to attempt during deserialization
      * @return the temporal
-     * @throws IllegalArgumentException if the input cannot be deserialized using any of the specified formats
+     * @throws TemporalSerializationException if deserialization fails with any specified formats
      * @since 2.0
      */
     T deserialize(@NotNull R input, @NotNull Iterable<? extends F> formats);
@@ -34,7 +42,7 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      * @param input the serialized input
      * @param format the format to use for deserialization
      * @return the temporal
-     * @throws IllegalArgumentException if the input cannot be deserialized using the specified format
+     * @throws TemporalSerializationException if deserialization fails with the specified format
      * @since 2.0
      */
     T deserialize(@NotNull R input, @NotNull F format);
@@ -54,21 +62,10 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      *
      * @param input the serialized input
      * @return the temporal
-     * @throws IllegalArgumentException if the input cannot be deserialized using the specified format
+     * @throws TemporalSerializationException if deserialization fails with the default format
      * @since 2.0
      */
     T deserialize(@NotNull R input);
-
-    /**
-     * Serializes a temporal into an output of type {@code R}.
-     *
-     * @param temporal the temporal to serialize
-     * @param formats the formats to attempt during serialization
-     * @return the output
-     * @throws IllegalArgumentException if the temporal cannot be serialized using any of the specified formats
-     * @since 2.0
-     */
-    R serialize(@NotNull T temporal, @NotNull Iterable<? extends F> formats);
 
     /**
      * Serializes a temporal into an output of type {@code R}, otherwise a fallback value
@@ -87,7 +84,7 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      * @param temporal the temporal to serialize
      * @param format the format to use for serialization
      * @return the output
-     * @throws IllegalArgumentException if the temporal cannot be serialized using the specified format
+     * @throws TemporalSerializationException if serialization fails with the specified format
      * @since 2.0
      */
     R serialize(@NotNull T temporal, @NotNull F format);
@@ -107,7 +104,7 @@ public interface TemporalSerializer<T extends Temporal, F extends TemporalFormat
      *
      * @param temporal the temporal to serialize
      * @return the output
-     * @throws IllegalArgumentException if the temporal cannot be serialized using the specified format
+     * @throws TemporalSerializationException if serialization fails with the default format
      * @since 2.0
      */
     R serialize(@NotNull T temporal);

@@ -10,7 +10,7 @@ final class FastTemporal extends AbstractTemporal {
 
     FastTemporal(long amount, @NotNull TemporalUnit unit) {
         Objects.requireNonNull(unit, "unit cannot be null");
-        this.millis = unit.convert(amount, TemporalUnit.MILLIS);
+        this.millis = TemporalUnit.MILLIS.convert(amount, unit);
     }
 
     FastTemporal(long millis) {

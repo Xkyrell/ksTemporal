@@ -15,6 +15,17 @@ import java.util.function.Supplier;
 public interface CompactTemporalSerializer
         extends TemporalSerializer<Temporal, CompactTemporalFormat, String> {
 
+    /**
+     * Returns the singleton compact temporal serializer.
+     *
+     * @return the serializer
+     * @since 2.0
+     */
+    @Contract(pure = true)
+    static CompactTemporalSerializer compact() {
+        return CompactTemporalSerializerImpl.Holder.INSTANCE;
+    }
+
     @Override
     default Temporal deserialize(@NotNull String input) {
         return deserialize(input, CompactTemporalFormat.defaults());

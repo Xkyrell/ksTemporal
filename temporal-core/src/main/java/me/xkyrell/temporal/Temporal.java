@@ -6,11 +6,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.function.LongUnaryOperator;
 
+/**
+ * Represents a value of time that supports transformation operations.
+ *
+ * @see TemporalValue
+ * @since 1.0
+ */
 @ApiStatus.NonExtendable
 public interface Temporal extends TemporalValue {
 
     /**
-     * Creates a new mutable temporal with minimal allocations.
+     * Creates a new mutable non-thread-safe temporal with minimal allocations.
      *
      * @param amount the time amount
      * @param unit the unit of the specified amount
@@ -23,7 +29,7 @@ public interface Temporal extends TemporalValue {
     }
 
     /**
-     * Creates a new immutable temporal.
+     * Creates a new immutable thread-safe temporal.
      *
      * @param amount the time amount
      * @param unit the unit of the specified amount
@@ -36,7 +42,8 @@ public interface Temporal extends TemporalValue {
     }
 
     /**
-     * Creates a new mutable temporal from milliseconds with minimal allocations.
+     * Creates a new mutable non-thread-safe temporal from milliseconds
+     * with minimal allocations.
      *
      * @param millis the time amount in milliseconds
      * @return a new mutable temporal
@@ -48,7 +55,7 @@ public interface Temporal extends TemporalValue {
     }
 
     /**
-     * Creates a new immutable temporal from milliseconds.
+     * Creates a new immutable thread-safe temporal from milliseconds.
      *
      * @param millis the time amount in milliseconds
      * @return a new immutable temporal
@@ -60,7 +67,7 @@ public interface Temporal extends TemporalValue {
     }
 
     /**
-     * Creates a new immutable temporal representing the difference
+     * Creates a new immutable thread-safe temporal representing the difference
      * between two milliseconds timestamps.
      *
      * @param from the start time in milliseconds
@@ -74,7 +81,7 @@ public interface Temporal extends TemporalValue {
     }
 
     /**
-     * Creates a new immutable temporal value representing the difference
+     * Creates a new immutable thread-safe temporal value representing the difference
      * between two temporal values.
      *
      * @param from the start temporal value
@@ -90,7 +97,7 @@ public interface Temporal extends TemporalValue {
     }
 
     /**
-     * Creates a new immutable copy of the specified temporal value.
+     * Creates a new immutable thread-safe copy of the specified temporal value.
      *
      * @param value the temporal value to copy
      * @return a new immutable temporal value
