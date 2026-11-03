@@ -1,5 +1,5 @@
 [versions]
-junit = "5.11.3"
+junit = "5.14.3"
 jetbrains-annotations = "26.1.0"
 
 [libraries]
