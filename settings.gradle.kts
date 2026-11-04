@@ -1,10 +1,20 @@
 rootProject.name = "ksTemporal"
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         mavenCentral()
+    }
+
+    plugins {
+        id("com.gradleup.nmcp") version "1.6.2"
     }
 }
 
