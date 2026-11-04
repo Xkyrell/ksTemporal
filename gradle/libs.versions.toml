@@ -1,5 +1,6 @@
 [versions]
 junit = "5.14.3"
+nmcp = "1.6.2"
 jetbrains-annotations = "26.1.0"
 
 [libraries]
@@ -10,6 +11,8 @@ junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params" }
 
 jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
+
+nmcp = { module = "com.gradleup.nmcp:com.gradleup.nmcp.gradle.plugin", version.ref = "nmcp" }
 
 [bundles]
 junit = ["junit-api", "junit-engine", "junit-params"]
